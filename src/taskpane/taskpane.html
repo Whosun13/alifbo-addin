@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alifbo — o'girish</title>
+    <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+    <link rel="stylesheet" href="taskpane.css" />
+</head>
+<body>
+    <main id="app" class="hidden">
+        <header class="head">
+            <div class="mark" aria-hidden="true">Ö</div>
+            <div>
+                <h1>Alifbo</h1>
+                <p class="sub">Kirill · Eski lotin · Yangi lotin</p>
+            </div>
+        </header>
+
+        <!-- Avto-aniqlash banneri -->
+        <div id="banner" class="banner hidden" role="status">
+            <span id="bannerText"></span>
+            <button id="bannerClose" class="banner-x" aria-label="Yopish">&times;</button>
+        </div>
+
+        <section class="group">
+            <label class="group-label" for="mode">Yo'nalish</label>
+            <div class="select-wrap">
+                <select id="mode">
+                    <option value="old2new">Eski lotin → Yangi lotin</option>
+                    <option value="new2old">Yangi lotin → Eski lotin</option>
+                    <option value="cyr2lat_new">Kirill → Yangi lotin</option>
+                    <option value="cyr2lat_old">Kirill → Eski lotin</option>
+                    <option value="lat2cyr">Lotin → Kirill</option>
+                </select>
+            </div>
+            <p class="hint" id="modeHint"></p>
+        </section>
+
+        <section class="group">
+            <span class="group-label">Qamrov</span>
+            <div class="seg" role="radiogroup" aria-label="Qamrov">
+                <label class="seg-item">
+                    <input type="radio" name="scope" value="document" checked />
+                    <span>Butun hujjat</span>
+                </label>
+                <label class="seg-item">
+                    <input type="radio" name="scope" value="selection" />
+                    <span>Belgilangan matn</span>
+                </label>
+            </div>
+        </section>
+
+        <section class="group hidden" id="tutuq-group">
+            <label class="check">
+                <input type="checkbox" id="normalizeTutuq" />
+                <span>Tutuq belgilarini bitta standart belgiga (ʼ) birlashtirish</span>
+            </label>
+            <p class="hint">Ma'no, san'at kabi so'zlardagi turli apostroflar bir xil ko'rinishga keltiriladi. Ingliz tili aralashgan hujjatlarda yoqmang.</p>
+        </section>
+
+        <div class="actions">
+            <button id="previewBtn" class="btn btn-ghost">Ko'rib chiqish</button>
+            <button id="applyBtn" class="btn btn-primary">O'zgartirish</button>
+        </div>
+
+        <section id="results" class="results hidden" aria-live="polite"></section>
+
+        <details class="panel">
+            <summary>Istisno so'zlar</summary>
+            <p class="hint">Bu so'zlarda <b>s'h</b> ikki alohida tovush — dastur ularni buzmaydi, apostrofsiz yozilgan bo'lsa tuzatadi va <b>qo'shimchalar bilan ham ishlaydi</b> (Isʼhoqov, Isʼhoqni, Isʼhoqga...). Har bir qatorda: <code>Lotin = Кирилл</code></p>
+            <textarea id="exceptions" rows="5" spellcheck="false"></textarea>
+            <div class="panel-actions">
+                <button id="saveExceptions" class="btn btn-small btn-ghost">Saqlash</button>
+                <button id="resetExceptions" class="btn btn-small btn-ghost">Standartga qaytarish</button>
+            </div>
+            <p class="hint hidden" id="exSaved">Saqlandi ✓</p>
+        </details>
+
+        <details class="panel">
+            <summary>Eslatma va cheklovlar</summary>
+            <ul>
+                <li><b>Bekor qilish:</b> o'zgarishni qaytarish uchun Word'da Ctrl+Z bosing.</li>
+                <li><b>Rim raqamlari:</b> XXI, IV kabi raqamlar Lotin→Kirill rejimida o'z holicha qoladi (XXI asr → XXI аср).</li>
+                <li><b>Kirill bilan ishlashda formatlash:</b> Kirill↔Lotin rejimlarida o'zgargan xatboshi ichidagi aralash formatlash (qisman qalin so'zlar) bir xillashishi mumkin. Lotin↔Lotin rejimlarida formatlash to'liq saqlanadi.</li>
+                <li><b>ц harfi:</b> ichki lug'at va qoidalar orqali tiklanadi (aksiya→акция, sirk→цирк, ofitsiant→официант), fe'l qo'shimchalari himoyalangan (ketsin→кетсин). Lug'atda yo'q nodir so'z uchraсa, natijani tekshirib qo'ying.</li>
+                <li><b>ng:</b> alifbodan chiqarilgani matnni o'zgartirmaydi — u avvaldan n+g bo'lib yozilgan.</li>
+            </ul>
+        </details>
+    </main>
+
+    <div id="loading" class="loading">Yuklanmoqda…</div>
+
+    <script src="engine.js"></script>
+    <script src="taskpane.js"></script>
+</body>
+</html>
